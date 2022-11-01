@@ -1,0 +1,366 @@
+/* No comment provided by engineer. */
+"about.new-version" = "New Version Available";
+
+/* No comment provided by engineer. */
+"about.title" = "About";
+
+/* No comment provided by engineer. */
+"about.version" = "Software Version";
+
+/* No comment provided by engineer. */
+"appearance-settings.change-chat-background" = "Change Chat Background";
+
+/* No comment provided by engineer. */
+"appearance-settings.change-home-background" = "Change Home Background";
+
+/* No comment provided by engineer. */
+"appearance-settings.color-scheme" = "COLOR SCHEME";
+
+/* No comment provided by engineer. */
+"appearance-settings.dark" = "Dark";
+
+/* No comment provided by engineer. */
+"appearance-settings.light" = "Light";
+
+/* No comment provided by engineer. */
+"appearance-settings.select-from-gallery" = "Select from gallery";
+
+/* No comment provided by engineer. */
+"appearance-settings.title" = "Appearance Settings";
+
+/* No comment provided by engineer. */
+"community-guidelines.title" = "Community Guidelines";
+
+/* (No Comment) */
+"composer.accessibility-label.cancelEdit" = "Cancel";
+
+/* (No Comment) */
+"composer.accessibility-label.send" = "Send";
+
+/* (No Comment) */
+"composer.accessibility-label.send-file" = "Send file";
+
+/* (No Comment) */
+"composer.edit-message" = "Edit Message:";
+
+/* (No Comment) */
+"composer.new-message" = "New Message…";
+
+/* No comment provided by engineer. */
+"deactivate-account.action-button-title" = "Deactivate Account";
+
+/* No comment provided by engineer. */
+"deactivate-account.action-description" = "When you deactivate your account you are permanently removing your account in its entirety from allgram. You will no longer be able to utilize the same username however your registered email will be released for a new account creation. Furtheremore, you will automatically exit all private and public Clubs that you either created or joined with this account.";
+
+/* No comment provided by engineer. */
+"deactivate-account.action-requirement" = "To continue, please enter your password:";
+
+/* No comment provided by engineer. */
+"deactivate-account.first-time" = "You cannot deactivate an account the first time you run allgram with a new user.  If you still want to deactivate the account - restart allgram.";
+
+/* No comment provided by engineer. */
+"deactivate-account.irreversible" = "This action is irreversible.";
+
+/* No comment provided by engineer. */
+"deactivate-account.password-placeholder" = "Password";
+
+/* No comment provided by engineer. */
+"deactivate-account.sorry" = "We hate to see you leave.";
+
+/* No comment provided by engineer. */
+"deactivate-account.title" = "Deactivate Account";
+
+/* (No Comment) */
+"event.context-menu.add-reaction" = "Add Reaction";
+
+/* (No Comment) */
+"event.context-menu.edit" = "Edit";
+
+/* (No Comment) */
+"event.context-menu.remove" = "Remove";
+
+/* (No Comment) */
+"event.context-menu.reply" = "Reply";
+
+/* (No Comment) */
+"event.edited" = "edited";
+
+/* (No Comment) */
+"event.reason" = "Reason: %@";
+
+/* (No Comment) */
+"event.redaction.redact-other" = "%@ removed %@'s message";
+
+/* (No Comment) */
+"event.redaction.redact-self" = "Message removed by %@";
+
+/* (No Comment) */
+"event.room-member.ban" = "%@ banned %@";
+
+/* (No Comment) */
+"event.room-member.change-avatar" = "%@ updated their profile picture";
+
+/* (No Comment) */
+"event.room-member.change-name" = "%@ changed their display name to %@";
+
+/* (No Comment) */
+"event.room-member.invited" = "%@ invited %@";
+
+/* (No Comment) */
+"event.room-member.joined" = "%@ joined";
+
+/* (No Comment) */
+"event.room-member.kicked" = "%@ kicked %@";
+
+/* (No Comment) */
+"event.room-member.left" = "%@ left";
+
+/* (No Comment) */
+"event.room-member.remove-avatar" = "%@ removed their profile picture";
+
+/* (No Comment) */
+"event.room-member.set-avatar" = "%@ set their profile picture";
+
+/* (No Comment) */
+"event.room-member.unknown-state" = "Unknown state event: %@";
+
+/* (No Comment) */
+"event.room-name.change-name" = "%@ changed the room name from %@ to %@";
+
+/* (No Comment) */
+"event.room-name.set-name" = "%@ set the room name to %@";
+
+/* (No Comment) */
+"event.room-power-level.change-other" = "%@ changed the power level of %@ from %@ to %@";
+
+/* (No Comment) */
+"event.room-power-level.change-self" = "%@ changed their power level from %@ to %@";
+
+/* (No Comment) */
+"event.room-topic.change" = "%@ changed the topic to '%@'";
+
+/* (No Comment) */
+"event.unknown-room-name-fallback" = "Unknown";
+
+/* (No Comment) */
+"event.unknown-sender-fallback" = "Unknown";
+
+/* (No Comment) */
+"language-settings.current" = "Current language";
+
+/* (No Comment) */
+"language-settings.other-available" = "Other available languages";
+
+/* (No Comment) */
+"language-settings.title" = "Language Settings";
+
+/* (No Comment) */
+"loading.1" = "Reticulating splines";
+
+/* (No Comment) */
+"loading.2" = "Discomfrobulating messages";
+
+/* (No Comment) */
+"loading.3" = "Logging in";
+
+/* (No Comment) */
+"loading.4" = "Restoring session";
+
+/* (No Comment) */
+"loading.cancel" = "Cancel";
+
+/* (No Comment) */
+"login.failure-back-to-login" = "Back to Login";
+
+/* (No Comment) */
+"login.form.homeserver" = "Homeserver";
+
+/* (No Comment) */
+"login.form.homeserver-optional-explanation" = "Homeserver is optional if you're using matrix.org.";
+
+/* (No Comment) */
+"login.form.password" = "Password";
+
+/* (No Comment) */
+"login.form.username" = "Username";
+
+/* (No Comment) */
+"login.open-registration-prompt" = "Don't have an account yet?";
+
+/* (No Comment) */
+"login.register-not-yet-implemented" = "Registering for new accounts is not yet implemented.";
+
+/* (No Comment) */
+"login.sign-in" = "Sign in";
+
+/* (No Comment) */
+"login.welcome-header" = "Welcome to ";
+
+/* (No Comment) */
+"login.welcome-message" = "Sign in to your account to get started.";
+
+/* (No Comment) */
+"new-conversation.alert-failed" = "Failed To Start Chat";
+
+/* (No Comment) */
+"new-conversation.cancel" = "Cancel";
+
+/* (No Comment) */
+"new-conversation.create-room" = "Start Chat";
+
+/* (No Comment) */
+"new-conversation.done" = "Done";
+
+/* (No Comment) */
+"new-conversation.edit" = "Edit";
+
+/* (No Comment) */
+"new-conversation.for-example" = "For example";
+
+/* (No Comment) */
+"new-conversation.public-room" = "Public Room";
+
+/* (No Comment) */
+"new-conversation.room-name" = "Room Name";
+
+/* (No Comment) */
+"new-conversation.title-chat" = "New Chat";
+
+/* (No Comment) */
+"new-conversation.title-room" = "New Room";
+
+/* (No Comment) */
+"new-conversation.username-placeholder" = "allgram ID";
+
+/* No comment provided by engineer. */
+"privacy-statement.title" = "Privacy Statement";
+
+/* (No Comment) */
+"reaction-picker.title" = "Tap on an emoji to send that reaction.";
+
+/* DM with $NAME, $LAST_ACTIVITY_TIMESTAMP $LAST_MESSAGE */
+"recent-rooms.accessibility-label.dm" = "DM with %@, %@ %@";
+
+/* (No Comment) */
+"recent-rooms.accessibility-label.new-conversation" = "New Conversation";
+
+/* (No Comment) */
+"recent-rooms.accessibility-label.new-message-badge" = "%u new messages";
+
+/* Room $NAME, $LAST_ACTIVITY_TIMESTAMP $LAST_MESSAGE */
+"recent-rooms.accessibility-label.room" = "Room %@, %@ %@";
+
+/* (No Comment) */
+"recent-rooms.accessibility-label.settings" = "Settings";
+
+/* (No Comment) */
+"recent-rooms.leave.alert-body" = "Are you sure you want to leave '%@'? This action cannot be undone.";
+
+/* (No Comment) */
+"recent-rooms.leave.alert-title" = "Leave Room";
+
+/* (No Comment) */
+"recent-rooms.new-message-placeholder" = "New Message";
+
+/* (No Comment) */
+"recent-rooms.pending-invitations.header" = "Pending Invitations";
+
+/* (No Comment) */
+"recent-rooms.pending-invitations.leave.alert-title" = "Reject Invitation?";
+
+/* (No Comment) */
+"recent-rooms.rooms.header" = "Rooms";
+
+/* (No Comment) */
+"room-power-level.admin" = "Admin";
+
+/* (No Comment) */
+"room-power-level.custom" = "Custom (%d)";
+
+/* (No Comment) */
+"room-power-level.default" = "Default";
+
+/* (No Comment) */
+"room-power-level.moderator" = "Moderator";
+
+/* (No Comment) */
+"room.attachment.select-type" = "Send attachment";
+
+/* (No Comment) */
+"room.attachment.type-photo" = "Photo";
+
+/* (No Comment) */
+"room.invitation.fallback-title" = "New Conversation";
+
+/* (No Comment) */
+"room.invitation.join-alert.join-button" = "Join";
+
+/* (No Comment) */
+"room.invitation.join-alert.message" = "Accept invitation to join '%@'?";
+
+/* (No Comment) */
+"room.invitation.join-alert.title" = "Join Conversation?";
+
+/* (No Comment) */
+"room.remove.action" = "Remove";
+
+/* (No Comment) */
+"room.remove.message" = "Are you sure you want to remove this message?";
+
+/* (No Comment) */
+"room.remove.title" = "Remove?";
+
+/* (No Comment) */
+"settings.accent-color" = "Accent Color";
+
+/* (No Comment) */
+"settings.app-icon" = "App Icon";
+
+/* (No Comment) */
+"settings.dismiss" = "Done";
+
+/* (No Comment) */
+"settings.log-out" = "Log Out";
+
+/* (No Comment) */
+"settings.title" = "Settings";
+
+/* (No Comment) */
+"tabs.calendar" = "Calendar";
+
+/* (No Comment) */
+"tabs.calls" = "Calls";
+
+/* (No Comment) */
+"tabs.chats" = "Chats";
+
+/* (No Comment) */
+"tabs.clubs" = "Clubs";
+
+/* (No Comment) */
+"tabs.home" = "Home";
+
+/* (No Comment) */
+"tabs.more" = "More";
+
+/* No comment provided by engineer. */
+"terms-and-conditions.title" = "Terms And Conditions";
+
+/* (No Comment) */
+"typing-indicator.many" = "Several people are typing";
+
+/* (No Comment) */
+"typing-indicator.single" = "%@ is typing";
+
+/* (No Comment) */
+"typing-indicator.single %@" = "%@ is typing";
+
+/* (No Comment) */
+"typing-indicator.two" = "%@ and %@ are typing";
+
+/* (No Comment) */
+"typing-indicator.two %@ %@" = "%@ and %@ are typing";
+
+/* No comment provided by engineer. */
+"user-settings.title" = "User Settings";
+

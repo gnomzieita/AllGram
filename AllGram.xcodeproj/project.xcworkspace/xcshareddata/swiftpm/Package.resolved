@@ -1,0 +1,61 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Down",
+        "repositoryURL": "https://github.com/johnxnguyen/Down.git",
+        "state": {
+          "branch": "master",
+          "revision": "e754ab1c80920dd51a8e08290c912ac1c2ac8b58",
+          "version": null
+        }
+      },
+      {
+        "package": "DSWaveformImage",
+        "repositoryURL": "https://github.com/dmrschmidt/DSWaveformImage.git",
+        "state": {
+          "branch": null,
+          "revision": "20332dc8397854a4742869cc63f1e8ed91cda3d7",
+          "version": "9.0.3"
+        }
+      },
+      {
+        "package": "DTCoreText",
+        "repositoryURL": "https://github.com/Cocoanetics/DTCoreText.git",
+        "state": {
+          "branch": null,
+          "revision": "b664664825da565b4c2b7a17dbe2369f68ae43d9",
+          "version": "1.6.26"
+        }
+      },
+      {
+        "package": "DTFoundation",
+        "repositoryURL": "https://github.com/Cocoanetics/DTFoundation.git",
+        "state": {
+          "branch": null,
+          "revision": "76062513434421cb6c8a1ae1d4f8368a7ebc2da3",
+          "version": "1.7.18"
+        }
+      },
+      {
+        "package": "KeychainAccess",
+        "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess.git",
+        "state": {
+          "branch": null,
+          "revision": "84e546727d66f1adc5439debad16270d0fdd04e7",
+          "version": "4.2.2"
+        }
+      },
+      {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "state": {
+          "branch": null,
+          "revision": "0c02c46cfdc0656ce74fd0963a75e5000a0b7f23",
+          "version": "7.1.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,627 @@
+//
+//  APIManager.swift
+//  AllGram
+//
+//  Created by Serg Basin on 23.10.2021.
+//
+
+import Foundation
+import Combine
+import MatrixSDK
+
+//For future handling errors
+enum NetworkError: Error, LocalizedError, Identifiable {
+    var id: String { localizedDescription }
+    case urlError(URLError)
+    case responseError(Int, String)
+    case decodingError(DecodingError)
+    case genericError
+    
+    var localizedDescription: String {
+        switch self {
+        case .urlError(let error):
+            return error.localizedDescription
+        case .responseError(let status, let message):
+            let range = (message.range(of: "message\":")?.upperBound
+                         ?? message.startIndex)..<message.endIndex
+            return "Bad response code: \(status) message : \(message[range])"
+        case .decodingError(let error):
+            var errorToReport = error.localizedDescription
+            
+            switch error {
+            case .dataCorrupted(let context):
+                let details = context.underlyingError?.localizedDescription
+                ?? context.codingPath.map { $0.stringValue }.joined(separator: ".")
+                errorToReport = "\(context.debugDescription) - (\(details))"
+            case .keyNotFound(let key, let context):
+                let details = context.underlyingError?.localizedDescription
+                ?? context.codingPath.map { $0.stringValue }.joined(separator: ".")
+                errorToReport = "\(context.debugDescription) (key: \(key), \(details))"
+            case .typeMismatch(let type, let context), .valueNotFound(let type, let context):
+                let details = context.underlyingError?.localizedDescription
+                ?? context.codingPath.map { $0.stringValue }.joined(separator: ".")
+                errorToReport = "\(context.debugDescription) (type: \(type), \(details))"
+            @unknown default:
+                break
+            }
+            return  errorToReport
+        case .genericError:
+            return "An unknown error has been occured"
+        }
+    }
+}
+
+enum MeetingFrequency: String {
+    case daily, weekly, monthly, never
+}
+
+enum APNTokenType: String {
+    case voip
+    case `default`
+}
+
+enum ClubRoomType {
+    /// Public and unencrypted
+    case `public`
+    /// Private and unencrypted (not in search)
+    case `private`
+    /// Private and encrypted (not in search, no history for new users)
+    case encrypted
+}
+
+enum NotificationsType: String {
+    case chat, club, meeting
+}
+
+enum ApiType {
+    
+    /// Get description of room
+    case getRoomDescription(roomId: String, accessToken: String)
+    
+    /// Set room description
+    case setRoomDescription(roomId: String, description: String, accessToken: String)
+    
+    
+    case clubsSearch(userId: String, searchTerm: String)
+    
+    case createMeetingRoom(roomName: String, userIDList: [String], accessToken: String)
+    case createClubRoom(roomName: String, topic: String, type: ClubRoomType, roomAliasName: String, roomDescription: String, accessToken: String)
+    case createChatRoom(name: String? = nil, inviteIDs: [String], accessToken: String)
+        
+    case userAvatar(userId: String, accessToken: String)
+<<<<<<< HEAD
+        
+    var baseUrl: String {
+        switch self{
+=======
+    
+    // Calls history (for Calls tab)
+    case callHistoryGetMissed(accessToken: String)
+    case callHistoryGetHistory(accessToken: String) // Will reset missed counter
+    case callHistoryClearHistory(accessToken: String)
+    case callHistoryRecordCalling(roomId: String, isVideo: Bool, accessToken: String)
+    case callHistoryRecordAnswering(roomId: String, accessToken: String)
+    
+    case updateNotificationSettings(_ value: Bool ,_ type: NotificationsType, accessToken: String)
+    case getNotificationSettings(accessToken: String)
+    
+    var baseUrl: String {
+        switch self{
+        case .checkForUpdates, .redisSearch, .roomIsMeeting, .roomIsDirect, .roomsInfo, .meetings, .addMeetingEvent, .registerApnToken, .unregisterApnToken, .updateNotificationSettings, .getNotificationSettings, .callHistoryGetMissed, .callHistoryGetHistory, .callHistoryClearHistory, .callHistoryRecordCalling, .callHistoryRecordAnswering:
+            return API.identityServer.baseURL
+>>>>>>> 31c18d7065477c7bcc3186fdd8cdd3e76e69b78e
+            
+        case .clubsSearch, .getRoomDescription, .setRoomDescription, .createMeetingRoom, .createClubRoom, .createChatRoom, .userAvatar:
+            return API.server.baseURL
+            
+        }
+    }
+    
+    var port: Int? {
+        switch self {
+<<<<<<< HEAD
+=======
+        case .checkForUpdates, .redisSearch, .roomIsMeeting, .roomIsDirect, .roomsInfo, .callHistoryGetMissed, .callHistoryGetHistory, .callHistoryClearHistory, .callHistoryRecordCalling, .callHistoryRecordAnswering, .meetings, .addMeetingEvent, .registerApnToken, .unregisterApnToken, .updateNotificationSettings, .getNotificationSettings:
+            return API.identityServer.port
+>>>>>>> 31c18d7065477c7bcc3186fdd8cdd3e76e69b78e
+            
+        case .userAvatar, .clubsSearch, .getRoomDescription, .setRoomDescription, .createMeetingRoom, .createClubRoom, .createChatRoom:
+            return API.server.port
+            
+        }
+    }
+    
+    var path: String {
+        switch self {
+
+        case .clubsSearch:
+            return "/_matrix/client/r0/custom-search"
+            
+        case .createMeetingRoom, .createClubRoom, .createChatRoom:
+            return "/_matrix/client/r0/createRoom"
+            
+        case .userAvatar(let userId, _):
+            return "/_matrix/client/r0/profile/\(userId)/avatar_url"
+            
+        case .getRoomDescription(let roomId, _):
+            return "/_matrix/client/r0/rooms/\(roomId)/state/m.room.description"
+            
+        case .setRoomDescription(let roomId, _, _):
+            return "/_matrix/client/r0/rooms/\(roomId)/state/m.room.description"
+            
+<<<<<<< HEAD
+=======
+        case .callHistoryGetMissed, .callHistoryGetHistory, .callHistoryClearHistory, .callHistoryRecordCalling, .callHistoryRecordAnswering:
+            return "/api/call-history"
+>>>>>>> 31c18d7065477c7bcc3186fdd8cdd3e76e69b78e
+        }
+    }
+    
+    var method: String {
+        switch self {
+<<<<<<< HEAD
+
+        case .clubsSearch, .createMeetingRoom, .createClubRoom, .createChatRoom:
+            return "POST"
+            
+        case .userAvatar, .getRoomDescription:
+=======
+        case .userAvatar, .checkForUpdates, .redisSearch, .roomIsDirect, .meetings, .roomIsMeeting, .getRoomDescription, .getNotificationSettings, .callHistoryGetMissed, .callHistoryGetHistory:
+>>>>>>> 31c18d7065477c7bcc3186fdd8cdd3e76e69b78e
+            return "GET"
+            
+        case .roomsInfo, .addMeetingEvent, .clubsSearch, .createMeetingRoom, .createClubRoom, .createChatRoom, .registerApnToken, .unregisterApnToken, .updateNotificationSettings, .callHistoryRecordCalling:
+            return "POST"
+            
+        case .setRoomDescription:
+            return "PUT"
+<<<<<<< HEAD
+=======
+            
+        case .callHistoryRecordAnswering:
+            return "PATCH"
+            
+        case .callHistoryClearHistory:
+            return "DELETE"
+>>>>>>> 31c18d7065477c7bcc3186fdd8cdd3e76e69b78e
+        }
+    }
+    
+    /// Parameter used in `initial_state` to start room with ENABLED encryption
+    static let encryptionEvent: [String: Any] = [
+        "content": [
+            "algorithm": "m.megolm.v1.aes-sha2"
+        ],
+        "state_key": "",
+        "type": "m.room.encryption"
+    ]
+    
+    var httpBody: [String: Any]? {
+        switch self {
+
+            
+        case .clubsSearch(_, let searchTerm):
+            return [
+                "filter": [
+                    "generic_search_term": searchTerm
+                ]
+            ]
+        case .setRoomDescription(_, let description, _):
+            return [
+                "description": description
+            ]
+            
+        case .createMeetingRoom(let roomName, let userIDList, _):
+            return [
+                "creation_content": [
+                    "m.federate": false
+                ],
+                "initial_state": [], // No encryption for now
+                "is_meeting": true,
+                "invite": userIDList,
+                "is_direct": true,
+                "visibility": MXRoomDirectoryVisibility.private.identifier,
+                "preset": MXRoomPreset.trustedPrivateChat.identifier,
+                "name": roomName
+            ]
+            
+        case .createClubRoom(let roomName, let topic, let clubType, let roomAliasName, let roomDescription, _):
+            var visibility: String {
+                switch clubType {
+                case .public:
+                    return MXRoomDirectoryVisibility.public.identifier
+                case .private:
+                    return MXRoomDirectoryVisibility.private.identifier
+                case .encrypted:
+                    return MXRoomDirectoryVisibility.private.identifier
+                }
+            }
+            var preset: String {
+                switch clubType {
+                case .public:
+                    return MXRoomPreset.publicChat.identifier
+                case .private:
+                    return MXRoomPreset.privateChat.identifier
+                case .encrypted:
+                    return MXRoomPreset.trustedPrivateChat.identifier
+                }
+            }
+            var club: [String: Any] = [
+                "creation_content": [
+                    "m.federate": false
+                ],
+                "initial_state": clubType == .encrypted ? [ApiType.encryptionEvent] : [],
+                "name": roomName,
+                "topic": topic,
+                "visibility": visibility,
+                "preset": preset,
+                "is_direct": false
+            ]
+            if roomAliasName != "" {
+                club["room_alias_name"] = roomAliasName
+            }
+            if roomDescription != "" {
+                club["description"] = roomDescription
+            }
+            return club
+            
+        case .createChatRoom(let name, let inviteIDs, _):
+            var chat: [String: Any] = [
+                "creation_content": [
+                    "m.federate": false
+                ],
+                "initial_state": [ApiType.encryptionEvent],
+                "invite": inviteIDs,
+                "is_direct": true,
+                "visibility": MXRoomDirectoryVisibility.private.identifier,
+                "preset": MXRoomPreset.trustedPrivateChat.identifier
+            ]
+            if let chatName = name, chatName != "" {
+                chat["name"] = chatName
+            }
+            return chat
+            
+<<<<<<< HEAD
+=======
+        case .registerApnToken(let token, let type, _):
+            return [
+                "registration_token": token,
+                "token_type": type.rawValue
+            ]
+            
+        case .unregisterApnToken(let token, let type, _):
+            return [
+                "registration_token": token,
+                "token_type": type.rawValue
+            ]
+            
+        case .updateNotificationSettings(let value, let type, _):
+            return [type.rawValue: value]
+            
+        case .callHistoryRecordCalling(let roomId, let isVideo, _):
+            return [
+                "room_id": roomId,
+                "video": isVideo
+            ]
+            
+        case .callHistoryRecordAnswering(let roomId, _):
+            return [
+                "room_id": roomId
+            ]
+            
+>>>>>>> 31c18d7065477c7bcc3186fdd8cdd3e76e69b78e
+        default:
+            return nil
+        }
+    }
+    
+    var queryItems: [URLQueryItem]? {
+        switch self {
+            
+        case .clubsSearch(let userId, let searchTerm):
+            return [
+                URLQueryItem(name: "userId", value: userId.description),
+                URLQueryItem(name: "search_term", value: searchTerm.description)
+            ]
+            
+<<<<<<< HEAD
+=======
+        case .redisSearch(let searchTerm, let userId, let limit, let offset):
+            return [
+                URLQueryItem(name: "limit", value: limit.description),
+                URLQueryItem(name: "offset", value: offset.description),
+                URLQueryItem(name: "user_id", value: userId.description),
+                // -- the trailing asterisk is added for the workaround of server behavior
+                URLQueryItem(name: "search_term", value: searchTerm.description + "*")
+            ]
+            
+        case .callHistoryGetMissed:
+            return [
+                URLQueryItem(name: "only_missed", value: "1"),
+            ]
+            
+>>>>>>> 31c18d7065477c7bcc3186fdd8cdd3e76e69b78e
+        default:
+            return nil
+        }
+    }
+    
+    var headers: [String: String] {
+        switch self {
+            
+        case .createMeetingRoom(_, _, let accessToken), .createClubRoom(_, _, _, _, _, let accessToken), .createChatRoom(_, _, let accessToken):
+            return [
+                "Authorization": "Bearer \(accessToken)",
+                "Content-Type": "application/json"
+            ]
+            
+        case .userAvatar(_, let accessToken):
+            return [
+                "Authorization": "Bearer \(accessToken)",
+                "Content-Type": "application/json"
+            ]
+            
+<<<<<<< HEAD
+=======
+        case .callHistoryGetMissed(let accessToken), .callHistoryGetHistory(let accessToken), .callHistoryClearHistory(let accessToken), .callHistoryRecordCalling(_, _, let accessToken), .callHistoryRecordAnswering(_, let accessToken):
+            return [
+                "Authorization": "Bearer \(accessToken)",
+                "Content-Type": "application/json"
+            ]
+            
+>>>>>>> 31c18d7065477c7bcc3186fdd8cdd3e76e69b78e
+        default:
+            return [:]
+        }
+    }
+    
+    var request: URLRequest {
+        var urlComponents = URLComponents(string: baseUrl)!
+        urlComponents.path = path
+        urlComponents.port = port
+        urlComponents.queryItems = queryItems
+        var request = URLRequest(url: (urlComponents.url)!)
+        for header in headers {
+            request.addValue(header.value, forHTTPHeaderField: header.key)
+        }
+        request.httpMethod = method
+        if let httpBody = httpBody {
+            let jsonData = try! JSONSerialization.data(withJSONObject: httpBody, options: [])
+            request.httpBody = jsonData
+        }
+        return request
+    }
+    
+}
+
+class ApiManager {
+    private var cancels = Set<AnyCancellable>()
+    static let shared = ApiManager()
+    
+    private func fetch<T: Decodable>(_ request: URLRequest) -> AnyPublisher<T, Error> {
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map { $0.data }
+            .handleEvents(receiveOutput: { data in
+                //print("URLSession.handleEvents request: \(request.url?.path ?? "nil") | data: " + (String(data: data, encoding: .utf8) ?? "none"))
+            })
+            .decode(type: T.self, decoder: JSONDecoder())
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
+    }
+    
+    /// Returns `true` when version is OK and `false` when needs update.
+    /// Expects a valid format of version with build and dev/prod separation
+//    func checkForUpdates(version: String) -> AnyPublisher<Bool?, Never> {
+//        let request = ApiType.checkForUpdates(version: version).request
+//        return fetch(request)
+//            .map { (response: [String: Bool]) -> Bool in
+//                return response["status"]!
+//            }
+//            .replaceError(with: nil)
+//            .eraseToAnyPublisher()
+//    }
+    
+    /// Returns matrix URI (mxc://...) of the avatar of a given user
+    func getUserAvatar(userId: String, accessToken: String) -> AnyPublisher<String?, Never> {
+        let request = ApiType.userAvatar(userId: userId, accessToken: accessToken).request
+        return fetch(request)
+            .map { (response: [String: String]) -> String? in
+                return response["avatar_url"]
+            }
+            .replaceError(with: nil)
+            .eraseToAnyPublisher()
+    }
+    
+    // MARK: -
+    
+//    func redisSearch(searchRequest: String, fromUserId: String, limit: Int, offset: Int) -> AnyPublisher<[User], Never> {
+//        let request = ApiType.redisSearch(searchRequest: searchRequest, fromUserId: fromUserId, limit: limit, offset: offset).request
+//        return fetch(request)
+//            .map { (response: RedisSearch) -> [User] in
+//                return response.users
+//            }
+//            .replaceError(with: [User]())
+//            .eraseToAnyPublisher()
+//    }
+    
+    /// Expects `userId` to be in following format: `@example:allgram.me`
+    func clubsSearch(userId: String, searchTerm: String) -> AnyPublisher<[Club], Never> {
+        let request = ApiType.clubsSearch(userId: userId, searchTerm: searchTerm).request
+        return fetch(request)
+            .map { (response: ClubsSearch) -> [Club] in
+                return response.chunk
+            }
+            .replaceError(with: [Club]())
+            .eraseToAnyPublisher()
+    }
+    
+    // MARK: -
+    
+//    func getRoomsInfo(roomsIds: [String]) -> AnyPublisher<[RoomIsDirect], Never> {
+//        let request = ApiType.roomsInfo(ids: roomsIds).request
+//        return fetch(request)
+//            .map { (response: RoomsInfo) -> [RoomIsDirect] in
+//                return response.roomsIsDirect
+//            }
+//            .replaceError(with: [RoomIsDirect]())
+//            .eraseToAnyPublisher()
+//    }
+//
+    func getRoomDescription(roomId: String, accessToken: String) -> AnyPublisher<String?, Never> {
+        let request = ApiType.getRoomDescription(roomId: roomId, accessToken: accessToken).request
+        return fetch(request)
+            .map { (response: [String: String?]) -> String? in
+                return response["description"] ?? ""
+            }
+            .replaceError(with: "")
+            .eraseToAnyPublisher()
+    }
+    
+    func setRoomDescription(roomId: String, description: String, accessToken: String) -> AnyPublisher<String?, Never> {
+        let request = ApiType.setRoomDescription(roomId: roomId, description: description, accessToken: accessToken).request
+        return fetch(request)
+            .map { (response: [String: String?]) -> String? in
+                return response["event_id"] ?? ""
+            }
+            .replaceError(with: "")
+            .eraseToAnyPublisher()
+        }
+    
+    // MARK: - Creating Rooms
+    
+    func createChatRoom(name: String? = nil, inviteIDs: [String], accessToken: String) -> AnyPublisher<CreateRoomResponse, Error> {
+        let request = ApiType.createChatRoom(name: name, inviteIDs: inviteIDs, accessToken: accessToken).request
+        return fetch(request)
+            .eraseToAnyPublisher()
+    }
+    
+    func createClubRoom(roomName: String, topic: String, type: ClubRoomType, roomAliasName: String, roomDescription: String, accessToken: String) -> AnyPublisher<CreateRoomResponse, Error> {
+        let request = ApiType.createClubRoom(roomName: roomName, topic: topic, type: type, roomAliasName: roomAliasName, roomDescription: roomDescription, accessToken: accessToken).request
+        return fetch(request)
+            .eraseToAnyPublisher()
+    }
+    
+    func createMeetingRoom(meetingName: String, userIDList: [String], accessToken: String) -> AnyPublisher<CreateRoomResponse, Error> {
+        let request = ApiType.createMeetingRoom(roomName: meetingName, userIDList: userIDList, accessToken: accessToken).request
+        return fetch(request)
+            .eraseToAnyPublisher()
+    }
+    
+<<<<<<< HEAD
+
+}
+
+struct CallHistoryItem: Decodable {
+    let roomId: String
+    let timestamp: Int
+    let callerId: String
+    let groupCall: Bool
+    let videoCall: Bool
+    
+    // For 2 users (direct call)
+    private let directDisplayName: String?
+    private let directAvatarURI: String?
+    
+    // For 3+ users (group call)
+    private let groupRoomName: String?
+    private let groupRoomAvatarURI: String?
+    
+    var callDate: Date { Date(timeIntervalSince1970: TimeInterval(timestamp)) }
+    var displayName: String? { directDisplayName ?? groupRoomName }
+    var avatarURI: String? { directAvatarURI ?? groupRoomAvatarURI }
+    
+    enum CodingKeys: String, CodingKey {
+        case roomId = "room_id"
+        case timestamp = "date"
+        case callerId = "call_by"
+        case groupCall = "group_call"
+        case videoCall = "video"
+        // Optional
+        case directDisplayName = "displayname"
+        case directAvatarURI = "avatar_url"
+        case groupRoomName = "room_name"
+        case groupRoomAvatarURI = "room_avatar"
+=======
+    // MARK: - Handling APN Tokens
+    
+    func registerAPNToken(_ token: String, type: APNTokenType, accessToken: String) -> AnyPublisher<TokenResult, Error> {
+        let request = ApiType.registerApnToken(token, type: type, accessToken: accessToken).request
+        return fetch(request)
+            .eraseToAnyPublisher()
+    }
+    
+    func unregisterAPNToken(_ token: String, type: APNTokenType, accessToken: String) -> AnyPublisher<TokenResult, Error> {
+        let request = ApiType.unregisterApnToken(token, type: type, accessToken: accessToken).request
+        return fetch(request)
+            .eraseToAnyPublisher()
+    }
+    
+    // MARK: - Handling Notification Settings
+    
+    func getNotificationSettings(accessToken: String) -> AnyPublisher<[String: Bool?], Error> {
+        let request = ApiType.getNotificationSettings(accessToken: accessToken).request
+        return fetch(request)
+            .map { (response: [String: Bool?]) -> [String: Bool?] in
+                return response
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func updateNotificationSettings(_ value: Bool,_ type: NotificationsType, accessToken: String) -> AnyPublisher<String, Error> {
+        let request = ApiType.updateNotificationSettings(value, type, accessToken: accessToken).request
+        return fetch(request)
+            .eraseToAnyPublisher()
+    }
+    
+    // MARK: - Calls History
+    
+    func getMissedCalls(accessToken: String) -> AnyPublisher<Int, Never> {
+        let request = ApiType.callHistoryGetMissed(accessToken: accessToken).request
+        return fetch(request)
+            .map { (response: [String: Int]) -> Int in
+                return response["missed_calls"] ?? 0
+            }
+            .replaceError(with: 0)
+            .eraseToAnyPublisher()
+    }
+    
+    func getCallHistory(accessToken: String) -> AnyPublisher<[CallHistoryItem], Error> {
+        let request = ApiType.callHistoryGetHistory(accessToken: accessToken).request
+        return fetch(request)
+            .eraseToAnyPublisher()
+    }
+    
+    func clearCallHistory(accessToken: String) -> AnyPublisher<Bool, Never> {
+        let request = ApiType.callHistoryClearHistory(accessToken: accessToken).request
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map { ($0.response as? HTTPURLResponse)?.statusCode == 200 }
+            .replaceError(with: false)
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
+    }
+    
+    func recordCalling(roomId: String, isVideo: Bool, accessToken: String) -> AnyPublisher<Bool, Never> {
+        let request = ApiType.callHistoryRecordCalling(roomId: roomId, isVideo: isVideo, accessToken: accessToken).request
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map { ($0.response as? HTTPURLResponse)?.statusCode == 201 }
+            .replaceError(with: false)
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
+>>>>>>> 31c18d7065477c7bcc3186fdd8cdd3e76e69b78e
+    }
+    
+    func recordAnswering(roomId: String, accessToken: String) -> AnyPublisher<Bool, Never> {
+        let request = ApiType.callHistoryRecordAnswering(roomId: roomId, accessToken: accessToken).request
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map { ($0.response as? HTTPURLResponse)?.statusCode == 201 }
+            .replaceError(with: false)
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
+    }
+}
+
+/// Please, do not use)))
+struct TokenResult: Decodable {
+    let token: String?
+    let refresh_token: String?
+}
